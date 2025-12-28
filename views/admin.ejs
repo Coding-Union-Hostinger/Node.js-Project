@@ -1,0 +1,34 @@
+<%- include('layout', { title: 'Admin' }) %>
+
+<section>
+  <h2>Admin Panel</h2>
+
+  <form method="POST" action="/admin/results">
+    <label>Time: <input name="time" placeholder="e.g., 12:00" required></label>
+    <label>Code: <input name="code" placeholder="4-digit" required pattern="\d{4}"></label>
+    <button type="submit">Add Result</button>
+  </form>
+
+  <h3>Latest Results</h3>
+  <% if (results && results.length) { %>
+  <table>
+    <thead><tr><th>Time</th><th>Code</th><th>Created</th><th>Action</th></tr></thead>
+    <tbody>
+      <% results.forEach(r => { %>
+        <tr>
+          <td><%= r.time %></td>
+          <td><%= r.code %></td>
+          <td><%= r.createdAt.toISOString() %></td>
+          <td>
+            <form method="POST" action="/admin/results/<%= r._id %>/delete" style="display:inline">
+              <button type="submit" onclick="return confirm('Delete?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } else { %>
+    <p>No results yet.</p>
+  <% } %>
+</section>
